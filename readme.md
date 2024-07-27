@@ -16,5 +16,21 @@ After downloading the web driver and extracting the files, locate the chromedriv
 
 **OPTIONAL**: Check out [Bright Data](https://brightdata.com/products/scraping-browser?utm_source=brand&utm_campaign=brnd-mkt_youtube_techwithtim_selenium&promo=techwithtim) later on for Web Scraping at large to avoid Captchas and getting blocked.  
 
+Open a terminal and navigate to the directory  
+    $...\Open_AI_Custom_Chatbot>  
 
+Type in the command:
+    `pip install pipenv`  
+    Pipenv will be used to install compatible versions of python packages and sub-dependencies using the pipfile and pipfile.lock  
+
+Install python dependencies using the command:  
+    `pipenv install --ignore-pipfile`  
+
+(Optional) Spawn a shell in a virtual environment by typing in the command:  
+    `pipenv shell`  
+While in the virtual environment, you can leave using the command:  
+    `exit`  
+Do NOT use the command deactiviate, as this may not actually exit the virtual environment.  
+
+Open MainCode.py and insert your OPEN_API_KEY on the first line.  
 
