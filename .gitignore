@@ -4,7 +4,7 @@ Open_AI_Custom_Chatbot/dist/
 tests/
 Open_AI_Custom_Chatbot/*.egg-info/
 Open_AI_Custom_Chatbot/chroma_vectorestore/
-Open_AI_Custom_Chatbot/data/*
-Open_AI_Custom_Chatbot/outputs/*
+Open_AI_Custom_Chatbot/data/
+Open_AI_Custom_Chatbot/outputs/
 images/
 chromedriver.exe
