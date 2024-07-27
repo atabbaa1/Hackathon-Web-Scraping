@@ -1,0 +1,83 @@
+
+/* Sets the font for all the text */
+* {
+    box-sizing: border-box;
+    font-family: 'Arial', 'Helvetica', sans-serif;
+}
+
+/* Sets the characteristics of all h1 elements */
+h1 {
+    position: relative;
+    display: inline-block; 
+}
+
+/* Sets the characteristics for all h2 elements */
+h2 {
+    margin-bottom: 10px;
+    text-decoration: underline;
+}
+
+/* Sets the characteristics for all p elements */
+p {
+    margin-top: 0px;
+}
+
+/* container that is the width of the page, to align elements */
+.container {
+    width: 100%;
+    text-align: center; 
+}
+
+/* container that sets a max width for the text */
+.text-container {
+    max-width: 300px;
+}
+
+
+/* does the split-underline effect on the titles */
+.split-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px; /* Adjust based on how far you want the underline from the text */
+    width: 100%;
+    height: 3px; /* Adjust the thickness of the underline */
+    background: linear-gradient(to right, #05AFE4 50%, #EE3224 50%);
+}
+
+/* sets the grid placement for all the information elements (the date, description, votes) */
+.information {
+    width: 50%;
+    float: left;
+    padding: 15px;
+}
+
+/* sets the grid placement for the image of the congress seating chart */
+.image {
+    width: 50%;
+    float: left;
+    padding: 15px;
+}
+
+/* container for placing votes */
+.container-wrapper {
+    display: flex; 
+    justify-content: center; 
+    padding: 15px; 
+}
+
+/* sets the grid placement for the yay or nay votes section */
+.votes {
+    width: 100%;
+    padding: 15px;
+    float: left;
+}
+
+/* sets the grid placement for the votes */
+.votes_column {
+    width: 50%;
+    line-height: 35px;
+    padding: 15px;
+    box-sizing: border-box;
+    text-align: center;
+}
