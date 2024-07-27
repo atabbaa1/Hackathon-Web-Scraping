@@ -1,6 +1,10 @@
 OPENAI_API_KEY = ""
 from langchain.embeddings import OpenAIEmbeddings
 
+import os
+from os import listdir
+from os.path import isfile
+
 class WiseSage(object):
 
     """
@@ -166,7 +170,7 @@ class WiseSage(object):
         from langchain.vectorstores import Chroma
         from langchain.embeddings import OpenAIEmbeddings
         embed = OpenAIEmbeddings(openai_api_key = OPENAI_API_KEY)
-        vectorstore = Chroma.from_documents(documents=all_splits, embedding=embed, persist_directory = "chroma_vectorstore")
+        vectorstore = Chroma.from_documents(documents=all_splits, embedding=embed, persist_directory = self.directory_path + "chroma_vectorstore")
         # cleanup
         vectorstore.delete_collection()
         # return embed, vectorstore
@@ -180,7 +184,7 @@ class WiseSage(object):
     def RetrieveData(self, inputQuestion, embedding):
         from langchain.vectorstores import Chroma
         # For any Vector Store
-        retriever = Chroma(persist_directory ="chroma_vectorstore", embedding_function = embedding).as_retriever(search="similarity_search")
+        retriever = Chroma(persist_directory =self.directory_path + "chroma_vectorstore", embedding_function = embedding).as_retriever(search="similarity_search")
         # retriever is VectorStoreRetriever object. Its relevant splits can be extracted with the line of code below
         # relevant_splits = retriever.get_relevant_documents(inputQuestion)
         # print("The page content in the first relevant split is ", relevant_splits[0].page_content)
@@ -224,7 +228,7 @@ class WiseSage(object):
         from langchain.chat_models import ChatOpenAI
         from langchain import hub
 
-        chat_llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key = OPENAI_API_KEY)
+        chat_llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.3, openai_api_key = OPENAI_API_KEY)
 
         
         # Creating a custom prompt for memory incorporation
@@ -249,10 +253,11 @@ class WiseSage(object):
 
         # The following is the prompt for the first message in the chat, when there's no chat history
         qa_system_prompt = "You are an assistant for question-answering tasks. \
-            Use the following pieces of retrieved context to answer the question. \
-            If you don't know the answer, just say that you don't know. \
-            Keep the answer concise. \
-            End all responses with I have spoken \
+            Use the following pieces of retrieved context to answer the question\
+            Everything you know is with regards to one bill. So, if you are asked to summarize a bill,\
+            summarize all the information you have. Mentioning Sec. numbers should be avoided in the summary.\
+            Include at least one complete sentence for each title, but do not include more than five complete sentences\
+             for each title. Shorter, more concise responses are better than long responses.\
             Context: {context} \
             Answer:"
         qa_prompt = ChatPromptTemplate.from_messages(
@@ -302,32 +307,30 @@ class WiseSage(object):
             # print(chunk, end="", flush=True)
         ai_msg = rag_chain.invoke({"question": inputQuestion, "chat_history": self.chat_history}) # type is AIMessage
         self.chat_history.extend([HumanMessage(content=inputQuestion), ai_msg])
-        print(ai_msg)
-        # print("The rag_chain is ", rag_chain)
+        
+        # Exporting the response to a .txt file in the outputs directory
+        with open(self.directory_path + "outputs" + "\\" + "llm_response.txt", "w") as text_file:
+            text_file.write(ai_msg.content)
+        # Closing the new .txt file
+        text_file.close()
 
 
 
-    def main(self):
+    def main(self, directory_path):
+        self.directory_path = directory_path
         self.chat_history = []
         embedding = OpenAIEmbeddings(openai_api_key = OPENAI_API_KEY)
-        while True:
-            procedure = input("Enter 1 for inserting data. Enter 2 for asking a question about passed-in data.")
-            if procedure == "1":
-                filepaths = input("Enter the name(s) of the file(s) you want to be stored in a vectorestore.\n Supported file types are .csv, .py, .html, .pdf, and .txt: \n")
-                filepaths = filepaths.split()
-                documents = []
-                for filepath in filepaths:
-                    documents.extend(self.LoadData(filepath))
-                split_data = self.SplitData(documents)
-                self.StoreData(split_data)
-                print("Done analyzing the passed-in data.")
-            elif procedure == "2":
-                inputQuestion = input("Please type your question and click Enter:\n")
-                retriever = self.RetrieveData(inputQuestion, embedding)
-                self.GenerateResponse(inputQuestion, retriever)
-            else:
-                break
-        print("Thank you for using this chatbot! Have a good day!")
+        documents = []
+        for file in os.listdir(directory_path + "data"):
+            documents.extend(self.LoadData(directory_path + "data" + "\\" + file))
+        split_data = self.SplitData(documents)
+        self.StoreData(split_data)
+        print("Done analyzing the passed-in data.")
+        
+        
+        inputQuestion = "Please summarize the information you have regarding the bill."
+        retriever = self.RetrieveData(inputQuestion, embedding)
+        self.GenerateResponse(inputQuestion, retriever)
 
 
 
