@@ -1,10 +1,10 @@
 # File types to ignore
-Open_AI_Custom_Chtabot/build/
-Open_AI_Custom_Chtabot/dist/
+Open_AI_Custom_Chatbot/build/
+Open_AI_Custom_Chatbot/dist/
 tests/
-Open_AI_Custom_Chtabot/*.egg-info/
-Open_AI_Custom_Chtabot/chroma_vectorestore/
-Open_AI_Custom_Chtabot/data/*
-Open_AI_Custom_Chtabot/outputs/*
+Open_AI_Custom_Chatbot/*.egg-info/
+Open_AI_Custom_Chatbot/chroma_vectorestore/
+Open_AI_Custom_Chatbot/data/*
+Open_AI_Custom_Chatbot/outputs/*
 images/
 chromedriver.exe
