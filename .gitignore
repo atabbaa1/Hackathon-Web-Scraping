@@ -7,3 +7,5 @@ Open_AI_Custom_Chtabot/chroma_vectorestore/
 Open_AI_Custom_Chtabot/data/
 images/
 chromedriver.exe
+venv/
+congress_backend/db.sqlite3
