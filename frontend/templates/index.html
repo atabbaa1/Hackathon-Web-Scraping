@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to right, #5fb7ff, #7bbffe);
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .input-field {
+            width: 80%;
+            padding: 10px;
+            margin: 20px 0;
+            border: 2px solid #2e72e7;
+            border-radius: 5px;
+        }
+        .submit-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #2e72e7;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .submit-button:hover {
+            background-color: #5fb7ff;
+        }
+        .display-text {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Congress Bill Understander thingy majingy</h1>
+        <input type="text" id="inputText" class="input-field" placeholder="Enter your text here...">
+        <button class="submit-button" onclick="saveText()">Submit</button>
+        <div id="displayText" class="display-text"></div>
+    </div>
+
+    <script>
+        /*function displayText() {
+            var input = document.getElementById('inputText').value;
+            document.getElementById('displayText').innerText = input;
+        } */
+        function saveText() {
+            var input = document.getElementById('inputText').value;
+            fetch('/save_text', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: input }),
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert('Text saved successfully');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
