@@ -121,5 +121,5 @@ driver.quit()
 
 
 ###########################################       Calling LLM function         ####################################################
-# llm_summarizer = WiseSage()
-# llm_summarizer.main("Open_AI_Custom_Chatbot" + "\\", bill_name)
+llm_summarizer = WiseSage()
+llm_summarizer.main("Open_AI_Custom_Chatbot" + "\\", bill_name)
