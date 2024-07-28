@@ -76,12 +76,12 @@ if prog_table:
     tables = driver.find_elements(By.CLASS_NAME, "table-responsive")
 
     # Exporting the first table which is just overall parties
-    with open("Open_AI_Custom_Chatbot/data/by_party_table.html", "w") as party_table:
+    with open("Open_AI_Custom_Chatbot/outputs/by_party_table.html", "w") as party_table:
         party_table.write(tables[0].get_attribute("innerHTML"))
     party_table.close()
 
     # Exporting the second table which is each individual candidate
-    with open("Open_AI_Custom_Chatbot/data/by_candidate_table.html", "w") as candidate_table:
+    with open("Open_AI_Custom_Chatbot/outputs/by_candidate_table.html", "w") as candidate_table:
         candidate_table.write(tables[1].get_attribute("innerHTML"))
     candidate_table.close()
 
