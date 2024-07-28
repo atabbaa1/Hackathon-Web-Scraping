@@ -95,7 +95,7 @@ class WiseSage(object):
         from langchain.text_splitter import RecursiveCharacterTextSplitter
 
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=300, chunk_overlap=60, add_start_index=True
+            chunk_size=500, chunk_overlap=100, add_start_index=True
         )
         all_splits = text_splitter.split_documents(documents)
             # all_splits is an array containing the page_content and metadeta for each split
@@ -254,10 +254,11 @@ class WiseSage(object):
         # The following is the prompt for the first message in the chat, when there's no chat history
         qa_system_prompt = "You are an assistant for question-answering tasks. \
             Use the following pieces of retrieved context to answer the question\
-            Everything you know is with regards to one bill. So, if you are asked to summarize a bill,\
-            summarize all the information you have. Mentioning Sec. numbers should be avoided in the summary.\
+            If you are asked to summarize information, summarize what you know.\
+            Mentioning Sec. numbers should be avoided in the summary, but include numbers like percentages or costs.\
             Include at least one complete sentence for each title, but do not include more than five complete sentences\
-             for each title. Shorter, more concise responses are better than long responses.\
+            for each title. Shorter, more concise responses are better than long responses.\
+            If you do not know the answer, mention your uncertainty.\
             Context: {context} \
             Answer:"
         qa_prompt = ChatPromptTemplate.from_messages(
@@ -316,7 +317,7 @@ class WiseSage(object):
 
 
 
-    def main(self, directory_path):
+    def main(self, directory_path, bill_name):
         self.directory_path = directory_path
         self.chat_history = []
         embedding = OpenAIEmbeddings(openai_api_key = OPENAI_API_KEY)
@@ -328,7 +329,7 @@ class WiseSage(object):
         print("Done analyzing the passed-in data.")
         
         
-        inputQuestion = "Please summarize the information you have regarding the bill."
+        inputQuestion = "Please summarize the information you have regarding " + bill_name
         retriever = self.RetrieveData(inputQuestion, embedding)
         self.GenerateResponse(inputQuestion, retriever)
 
