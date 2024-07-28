@@ -20,15 +20,26 @@ def index():
 def save_text():
     data = request.get_json()
     text = data.get('text')
+    try: 
+        with open('url.txt', 'w') as file:
+            file.write(text)
+        
 
-    with open('url.txt', 'w') as file:
-        file.write(text)
-    
+        web_scraper = ScrapeAndLLM()
+        web_scraper.main()
 
-    web_scraper = ScrapeAndLLM()
-    web_scraper.main()
+        return 'Bill has been successfully summarized', 200
+    except Exception as e:
+        return str(e), 500 
 
-    return 'Bill has been successfully summarized', 200
+@app.route('/retrieve_text', methods=['GET'])
+def retrieve_text():
+    try:
+        with open('llm_response.txt', 'r') as file:
+            text = file.read()
+        return "Bill summary: " + text, 200
+    except FileNotFoundError:
+        return 'No text found', 404
 
 if __name__ == '__main__':
     app.run(debug=True)

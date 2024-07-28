@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,7 +30,7 @@
             border: 2px solid #2e72e7;
             border-radius: 5px;
         }
-        .submit-button {
+        .submit-button, .retrieve-button {
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
@@ -36,14 +38,24 @@
             color: white;
             font-size: 16px;
             cursor: pointer;
+            margin-top: 10px;
         }
-        .submit-button:hover {
+        .submit-button:hover, .retrieve-button:hover {
             background-color: #5fb7ff;
         }
         .display-text {
             margin-top: 20px;
             font-size: 18px;
             color: #333;
+        }
+        .retrieved-text {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+            white-space: pre-wrap; /* Preserve whitespace */
+        }
+        #retrieveButton {
+            display: none; /* Initially hide the button */
         }
     </style>
 </head>
@@ -53,13 +65,12 @@
         <input type="text" id="inputText" class="input-field" placeholder="Enter your text here...">
         <button class="submit-button" onclick="saveText()">Submit</button>
         <div id="displayText" class="display-text"></div>
+        
+        <button id="retrieveButton" class="retrieve-button" onclick="retrieveText()">Retrieve Text</button>
+        <div id="retrievedText" class="retrieved-text"></div>
     </div>
 
     <script>
-        /*function displayText() {
-            var input = document.getElementById('inputText').value;
-            document.getElementById('displayText').innerText = input;
-        } */
         function saveText() {
             var input = document.getElementById('inputText').value;
             fetch('/save_text', {
@@ -69,11 +80,39 @@
                 },
                 body: JSON.stringify({ text: input }),
             })
-            .then(response => response.text())
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .then(data => {
+                //alert('Text saved successfully');
+                document.getElementById('retrieveButton').style.display = 'inline-block'; // Show the retrieve button
+            })
             .catch((error) => {
                 console.error('Error:', error);
             });
         }
+
+        function retrieveText() {
+            fetch('/retrieve_text')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('retrievedText').innerText = data;
+                openFiles();
+            })
+            
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+        function openFiles() {
+            window.open('./by_candidate_table.html', '_blank');
+            window.open('./by_party_table.html', '_blank');
+        }
     </script>
 </body>
 </html>
+
+
