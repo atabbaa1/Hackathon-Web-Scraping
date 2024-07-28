@@ -4,6 +4,7 @@ from langchain.embeddings import OpenAIEmbeddings
 import os
 from os import listdir
 from os.path import isfile
+import sys
 
 class WiseSage(object):
 
@@ -309,21 +310,34 @@ class WiseSage(object):
         ai_msg = rag_chain.invoke({"question": inputQuestion, "chat_history": self.chat_history}) # type is AIMessage
         self.chat_history.extend([HumanMessage(content=inputQuestion), ai_msg])
         
-        # Exporting the response to a .txt file in the outputs directory
-        with open(self.directory_path + "outputs" + "\\" + "llm_response.txt", "w") as text_file:
+        # Exporting the response to a .txt file in the frontend\templates directory
+        # original_sys_path = sys.path.copy()
+        # current_directory = os.path.dirname(__file__)
+        # parent_directory = os.path.abspath(os.path.join(current_directory, os.pardir))
+        # sys.path.append(parent_directory)
+        dirname = os.path.dirname
+        print(dirname(dirname(__file__)))
+        
+        with open(os.path.join(dirname(dirname(__file__)), "frontend", "llm_response.txt"), "w") as text_file:
             text_file.write(ai_msg.content)
         # Closing the new .txt file
         text_file.close()
 
+        # sys.path = original_sys_path
+
 
 
     def main(self, directory_path, bill_name):
-        self.directory_path = directory_path
+        # self.directory_path = directory_path
+        self.directory_path = os.path.dirname(__file__)
+        print("self.directory_path is: ", self.directory_path)
         self.chat_history = []
         embedding = OpenAIEmbeddings(openai_api_key = OPENAI_API_KEY)
         documents = []
-        for file in os.listdir(directory_path + "data"):
-            documents.extend(self.LoadData(directory_path + "data" + "\\" + file))
+        for file in os.listdir(os.path.join(self.directory_path, "data")):
+            documents.extend(self.LoadData(os.path.join(self.directory_path, "data", file)))
+        # for file in os.listdir(directory_path + "data"):
+            # documents.extend(self.LoadData(directory_path + "data" + "\\" + file))
         split_data = self.SplitData(documents)
         self.StoreData(split_data)
         print("Done analyzing the passed-in data.")

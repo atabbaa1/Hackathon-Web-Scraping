@@ -8,3 +8,6 @@ Open_AI_Custom_Chatbot/data/
 Open_AI_Custom_Chatbot/outputs/
 images/
 chromedriver.exe
+frontend/by_candidate_table.html
+frontend/by_party_table.html
+frontend/llm_response.txt
