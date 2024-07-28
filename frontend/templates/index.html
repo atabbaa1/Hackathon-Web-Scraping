@@ -23,6 +23,15 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+        .notification {
+            font-size: 10px;
+            background: #5fb7ff;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
         .input-field {
             width: 80%;
             padding: 10px;
@@ -62,6 +71,9 @@
 <body>
     <div class="container">
         <h1>Congress Bill Understander thingy majingy</h1>
+        <div class="notification">
+            After the retrieve button appears and is clicked, please allow pop-ups, on the right hand side of your browser search bar, for this site to ensure full functionality.
+        </div>
         <input type="text" id="inputText" class="input-field" placeholder="Enter your text here...">
         <button class="submit-button" onclick="saveText()">Submit</button>
         <div id="displayText" class="display-text"></div>
@@ -108,8 +120,8 @@
             });
         }
         function openFiles() {
-            window.open('./by_candidate_table.html', '_blank');
-            window.open('./by_party_table.html', '_blank');
+            window.open('by_candidate_table.html', '_blank');
+            window.open('by_party_table.html', '_blank');
         }
     </script>
 </body>
