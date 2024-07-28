@@ -1,21 +1,53 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import os
 from Open_AI_Custom_Chatbot.MainCode import WiseSage
 import time
 
-service = Service(executable_path="chromedriver.exe")
-driver = webdriver.Chrome(service=service)
+
+############################################     connect with chromedirver     ############################################
+
+try:
+    # Try using the local chromedriver executable
+    service = Service(executable_path="chromedriver.exe")
+    driver = webdriver.Chrome(service=service)
+    print("Using local chromedriver executable.")
+except Exception as e:
+    # If the above fails, use ChromeDriverManager to install the chromedriver
+    print(f"Failed to use local chromedriver executable: {e}")
+    try:
+        service = Service(ChromeDriverManager().install())
+        driver = webdriver.Chrome(service=service)
+        print("Using ChromeDriverManager to install chromedriver.")
+    except Exception as e2:
+        print(f"Failed to use ChromeDriverManager: {e2}")
+        raise e2  # Reraise the exception if both methods fail
+
 
 pg_load_time = 5
+
+
+############################################     Retrieve url from frontend/url.txt      ###########################################################
+
+def read_url_from_file():
+    current_directory = os.path.dirname(__file__)  # Get the directory of the current script
+    target_file_path = os.path.join(current_directory, 'frontend', 'url.txt') 
+    with open(target_file_path, 'r') as file:
+        file_contents = file.read().strip()
+    return file_contents
 
 ############################################     Opening up the webpage      ###########################################################
 
 # Retrieving the website
-url = "https://www.congress.gov/bill/118th-congress/house-bill/7024" # Shorter bill
+#url = "https://www.congress.gov/bill/118th-congress/house-bill/7024" # Shorter bill
+url = read_url_from_file()
+
+print("The current url: ", url)
 # url = "https://www.congress.gov/bill/118th-congress/house-bill/2670" # longer bill
 driver.get(url)
 
